@@ -10,20 +10,23 @@
 function ft_link($str)
 {
     $ret = "";
-    print_r($str);
     if (count($str) == 6)
     {
-        $ret_1 = preg_replace_callback("/(title=\")(.*?)(\")/s", function ($s){
+        $ret_1 = preg_replace_callback("/(title=\")(.*?)(\")/", function ($s){
             if (count($s) == 4)
                 return $s[1].strtoupper($s[2]).$s[3];
-        }, $str[1]);
-        $ret_2 = preg_replace_callback("/(title=\")(.*?)(\")/s", function ($s){
+        }, $str[2]);
+        $tmp_2 = preg_replace_callback("/(title=\")(.*?)(\")/", function ($s){
             if (count($s) == 4)
                 return $s[1].strtoupper($s[2]).$s[3];
-        }, $str[1]);
+        }, $str[4]);
+        $ret_2 = preg_replace_callback("/^(.*?)(<|$)/", function ($s){
+            if (count($s) == 3)
+                return strtoupper($s[1]).$s[2];
+        }, $tmp_2);
         return $str[1].$ret_1.$str[3].$ret_2.$str[5];
     }
-    echo "ret : $ret\n";
+    return implode($str);
 }
 
 if ($argc == 2)
@@ -31,7 +34,7 @@ if ($argc == 2)
     $hand = fopen($argv[1], 'r');
     $file =  fread($hand, filesize($argv[1]));
 
-    $file = preg_replace_callback("/(<a )(.*?)(>)(.*?)(<\/a>)/s", "ft_link", $file);
+    $file = preg_replace_callback("/(<a )(.*?)(>)(.*?)(<\/a>)/", "ft_link", $file);
 
     echo $file;
 
