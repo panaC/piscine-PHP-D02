@@ -7,6 +7,7 @@
  * Time: 20:23
  */
 
+date_default_timezone_set("Europe/Paris");
 
 function select_month($str)
 {
